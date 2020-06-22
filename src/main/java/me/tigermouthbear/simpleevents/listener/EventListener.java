@@ -1,17 +1,16 @@
 package me.tigermouthbear.simpleevents.listener;
 
 import me.tigermouthbear.simpleevents.EventManager;
-import me.tigermouthbear.simpleevents.event.IEvent;
 import net.jodah.typetools.TypeResolver;
 
 import java.util.function.Consumer;
 
 /**
- * Links an {@link IEvent} to a consumer through the {@link EventManager}
+ * Links a class to a consumer through the {@link EventManager}
  * @author Tigermouthbear
  * @since 3/11/20
  */
-public class EventListener<T extends IEvent> {
+public class EventListener<T> {
 	/**
 	 * Stores priority of {@link EventListener}
 	 */
@@ -23,7 +22,7 @@ public class EventListener<T extends IEvent> {
 	private Consumer<T> consumer;
 
 	/**
-	 * Stores class of {@link IEvent} listened for
+	 * Stores class listened for
 	 */
 	private Class<T> eventClass;
 
@@ -65,7 +64,7 @@ public class EventListener<T extends IEvent> {
 
 	/**
 	 * Getter for eventClass
-	 * @return Class of {@link IEvent} which it is listening for
+	 * @return Class which it is listening for
 	 */
 	public Class<T> getEventClass() {
 		return eventClass;

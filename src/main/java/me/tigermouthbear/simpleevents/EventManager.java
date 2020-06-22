@@ -1,7 +1,5 @@
 package me.tigermouthbear.simpleevents;
 
-import me.tigermouthbear.simpleevents.event.Event;
-import me.tigermouthbear.simpleevents.event.IEvent;
 import me.tigermouthbear.simpleevents.listener.EventHandler;
 import me.tigermouthbear.simpleevents.listener.EventListener;
 
@@ -11,7 +9,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * Used to post {@link Event}s to {@link EventListener}s and register/unregister {@link EventListener}s
+ * Used to post events to {@link EventListener}s and register/unregister {@link EventListener}s
  * @author Tigermouthbear
  * @since 3/11/20
  */
@@ -23,18 +21,21 @@ public class EventManager {
 
 	/**
 	 * Holds all {@link EventListener}s for accepting consumers in post()
-	 * Uses a CopyOnWrite to prevent Concurrent Modification Exceptions when dispatching events
 	 */
 	private final List<EventListener> listeners = new CopyOnWriteArrayList<>();
 
 	/**
-	 * Accepts all consumers from the {@link EventListener}s of the {@link IEvent} passed through
-	 * @param event {@link IEvent} to post to {@link EventManager}
-	 * @param <T> Generifies {@link IEvent}
+	 * Accepts all consumers from the {@link EventListener}s of the class passed through
+	 * @param event class to post to {@link EventManager}
+	 * @param <T> Gentrifies the class
 	 * @return Event passed through
 	 */
-	public <T extends IEvent> T post(T event) {
-		// Sorting is not needed here, as it is done when objects are added to the list
+	@SuppressWarnings("unchecked")
+	// Will never not be a consumer
+	public <T> T post(T event) {
+
+		// Sorting is not needed here, as it is done when objects are added to the list,
+
 		for (EventListener listener : this.listeners) {
 			if (listener.getEventClass() == event.getClass()) {
 				listener.getConsumer().accept(event);
@@ -100,9 +101,9 @@ public class EventManager {
 	 * @param listener {@link EventListener} to add to the listener list
 	 */
 	public void register(EventListener listener) {
-		listeners.add(listener);
 		// Sort by priority on adding, so continuous sorting can be avoided
 		this.listeners.sort(PRIORITY_COMPARATOR);
+		listeners.add(listener);
 	}
 
 	/**
